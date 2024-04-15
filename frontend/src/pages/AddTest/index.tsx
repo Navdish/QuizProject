@@ -1,5 +1,15 @@
 import { FC, useEffect, useState } from "react";
-import { Box, Button, IconButton, MenuItem, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  FormControlLabel,
+  IconButton,
+  MenuItem,
+  Radio,
+  RadioGroup,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import * as React from "react";
@@ -9,40 +19,48 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
-
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 const AddTest: FC = () => {
   axios.defaults.headers.common["token"] = localStorage.getItem("token");
-  const [answer, setAnswer] = React.useState<Number>(1);
+  const [answer, setAnswer] = React.useState<String>("");
   const navigate = useNavigate();
   let { id } = useParams();
-  const [testname, setTestname] = useState<String>("");
+  const [options, setOptions] = useState<string[]>([]);
   const [total, setTotal] = useState<Number>(0);
   const [questions, setQuestions] = useState([]);
   async function getQuestions() {
     const questions = await axios.get(`http://localhost:8080/question/${id}`);
     console.log("questions", questions);
     var totalWeight = 0;
-    questions && questions?.data?.length > 0 &&  questions?.data?.map((q: any)=> {
-        totalWeight += q.weightage;
-    })
-    console.log(totalWeight);
-    setTotal(totalWeight)
+    questions &&
+      questions?.data?.length > 0 &&
+      questions?.data?.map((q: any) => {
+        totalWeight += q.question.weightage;
+      });
+    setTotal(totalWeight);
     setQuestions(questions.data);
   }
 
-  async function postQuestion(form : any) {
+  async function postQuestion(form: any) {
     const question = await axios.post(`http://localhost:8080/question`, form);
     console.log("question posted", question);
   }
+
+  const [radio, setRadio] = React.useState("true");
+
+  const handleRadio = (event: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(event.target.value);
+    setRadio(event.target.value);
+  };
   useEffect(() => {
     getQuestions();
   }, []);
   const handleSubmit = () => {
     if (questions.length === 0) alert("Not enough questions");
-    else { navigate("/dashboard");
+    else {
+      navigate("/dashboard");
     }
   };
   const [open, setOpen] = React.useState(false);
@@ -53,33 +71,66 @@ const AddTest: FC = () => {
 
   const handleClose = () => {
     setOpen(false);
+    setOptions([""]);
   };
 
   const handleChange = (event: SelectChangeEvent) => {
-    setAnswer(Number(event.target.value));
+    setAnswer(String(event.target.value));
+  };
+
+  const handleOptions = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    // console.log(event.target.value);
+    var op = event.target.value.split(",");
+    console.log("options length", op);
+    setOptions(op);
   };
   return (
     <Box sx={{ p: "24px" }}>
-        <Box sx={{display:"flex", justifyContent:"space-between"}}>
-            <Typography>Questions in this test -</Typography>
-            <Typography> Total Weightage = {Number(total)}</Typography>
-        </Box>
-       
+      <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+        <Typography>Questions in this test -</Typography>
+        <Typography> Total Weightage = {Number(total)}</Typography>
+      </Box>
+
       <form>
         <Box sx={{ display: "flex", flexDirection: "column" }}>
-
-          <Box sx={{display:'flex', flexDirection:"column", backgroundColor:"white", borderRadius:"0.8rem", border:"1px solid black", my:"20px", p:"20px"}}>
-            {questions && questions?.length > 0 && questions?.map((que: any)=> {
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              backgroundColor: "white",
+              borderRadius: "0.8rem",
+              border: "1px solid black",
+              my: "20px",
+              p: "20px",
+            }}
+          >
+            {questions &&
+              questions?.length > 0 &&
+              questions?.map((que: any) => {
                 return (
-                <Box sx={{height:"30px", color:"black", display:"flex", alignItems:"center", justifyContent:"space-around"}}>
-                    <Box>{que.question}</Box>
-                    <Box> 
-                    <IconButton><EditIcon/></IconButton>
-                    <IconButton><DeleteIcon/></IconButton>
-                    </Box> 
-                </Box>
+                  <Box
+                    sx={{
+                      height: "30px",
+                      color: "black",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-around",
+                    }}
+                  >
+                    <Box>{que.question.description}</Box>
+                    <Box>
+                      <IconButton>
+                        <EditIcon />
+                      </IconButton>
+                      <IconButton>
+                        <DeleteIcon />
+                      </IconButton>
+                    </Box>
+                  </Box>
                 );
-            })}
+              })}
           </Box>
           <Button variant="outlined" onClick={handleClickOpen}>
             Add new Question
@@ -95,11 +146,19 @@ const AddTest: FC = () => {
                 const formJson = Object.fromEntries(
                   (formData as any).entries()
                 );
-                const form = {...formJson, testId: id, answer};
+                var options = formJson.option.split(",");
+                console.log("options", options);
+                var trimmed_options = options.map((s: any) => s.trim());
+                const form = {
+                  ...formJson,
+                  testId: id,
+                  option: trimmed_options,
+                  answer,
+                };
                 console.log(form);
                 postQuestion(form);
                 handleClose();
-                window.location.reload();
+                // window.location.reload();
               },
             }}
           >
@@ -110,9 +169,9 @@ const AddTest: FC = () => {
                 autoFocus
                 required
                 margin="dense"
-                id="question"
-                name="question"
-                label="Question"
+                id="description"
+                name="description"
+                label="Question description"
                 type="text"
                 fullWidth
                 variant="standard"
@@ -120,60 +179,37 @@ const AddTest: FC = () => {
               <TextField
                 required
                 margin="dense"
-                id="option 1"
-                name="option1"
-                label="Option 1"
+                id="option"
+                name="option"
+                label="Options (Please enter options separated by commas)"
                 type="text"
                 fullWidth
                 variant="standard"
+                onChange={(
+                  event: React.ChangeEvent<
+                    HTMLInputElement | HTMLTextAreaElement
+                  >
+                ) => handleOptions(event)}
               />
-              <TextField
+
+              <Box sx={{ display: "flex", alignItems: "center" }}>
+                <Typography>Answer </Typography>
+                <Select
                 required
-                margin="dense"
-                id="option 2"
-                name="option2"
-                label="Option 2"
-                type="text"
-                fullWidth
-                variant="standard"
-              />
-              <TextField
-                required
-                margin="dense"
-                id="option 3"
-                name="option3"
-                label="Option 3"
-                type="text"
-                fullWidth
-                variant="standard"
-              />
-              <TextField
-                required
-                margin="dense"
-                id="option 4"
-                name="option4"
-                label="Option 4"
-                type="text"
-                fullWidth
-                variant="standard"
-              />
-              <Box sx={{display:"flex", alignItems:"center"}}>
                 
-                <Typography>Answer - </Typography>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={String(answer)}
-                label="Answer"
-                onChange={handleChange}
-              >
-                <MenuItem value={1}>1</MenuItem>
-                <MenuItem value={2}>2</MenuItem>
-                <MenuItem value={3}>3</MenuItem>
-                <MenuItem value={4}>4</MenuItem>
-              </Select>
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={String(answer)}
+                  onChange={handleChange}
+                  fullWidth
+                >
+                  {options &&
+                    options.length > 0 &&
+                    options.map((i) => {
+                      return <MenuItem value={i}>{String(i)}</MenuItem>;
+                    })}
+                </Select>
               </Box>
-              
 
               <TextField
                 required
@@ -185,6 +221,28 @@ const AddTest: FC = () => {
                 fullWidth
                 variant="standard"
               />
+            <Box sx={{display:"flex", alignItems:"center"}}>
+              <Typography>Required - &nbsp;</Typography>
+              <RadioGroup
+              
+                row
+                aria-labelledby="demo-controlled-radio-buttons-group"
+                name="optional"
+                value={radio}
+                onChange={handleRadio}
+              >
+                <FormControlLabel
+                  value={true}
+                  control={<Radio />}
+                  label="true"
+                />
+                <FormControlLabel
+                  value={false}
+                  control={<Radio />}
+                  label="false"
+                />
+              </RadioGroup>
+              </Box>
             </DialogContent>
             <DialogActions>
               <Button onClick={handleClose}>Cancel</Button>

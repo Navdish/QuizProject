@@ -10,7 +10,7 @@ exports.addQuestion = async(req, res)=> {
         if(!response) throw new CustomError("Question not added", 500)
         res.status(200).json(response);
     } catch (error) {
-        res.status(error?.code).json({message : error?.message});
+        res.status(error?.code || 500).json({message : error?.message});
     }
 }
 
@@ -22,6 +22,7 @@ exports.fetchQuestion = async(req, res)=> {
         if(!response) throw new CustomError("Question not fetched", 500)
         res.status(200).json(response);
     } catch (error) {
-        res.status(error?.code).json({message: error?.message});
+        console.log("errorororor", error)
+        res.status(error?.code|| 500).json({message: error?.message});
     }
 }
