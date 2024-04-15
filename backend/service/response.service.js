@@ -1,5 +1,5 @@
 const CustomError = require('../lib/error');
-const {Response, Test, Question, User} = require('../models');
+const {Response, Test, Question, User} = require('../model');
 
 exports.addResponses = async({userId, data, params})=>{
     console.log("response service")
@@ -17,10 +17,10 @@ exports.addResponses = async({userId, data, params})=>{
         {
             const str = `option${q.answer}`;
             if(responses[q._id][0] === String(q[str]))
-            marks += q.weightage;
-            responses[q._id].push(true);
+            {marks += q.weightage;
+            responses[q._id].push(true);}
+            else if(responses[q._id]) responses[q._id].push(false);
         }
-        else if(responses[q._id]) responses[q._id].push(false);
     })
     console.log("response service2")
     const response = await Response.create({userId, testId: id, marks, totalMarks, questions: responses});
