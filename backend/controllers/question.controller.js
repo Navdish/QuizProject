@@ -5,7 +5,6 @@ const jwt = require("jsonwebtoken");
 
 exports.addQuestion = async(req, res)=> {
     try {
-        console.log("Add a qs")
         const response = await questionService.addQuestions({userId : req?.user?.id, data: req?.body});
         if(!response) throw new CustomError("Question not added", 500)
         res.status(200).json(response);
@@ -17,12 +16,10 @@ exports.addQuestion = async(req, res)=> {
 exports.fetchQuestion = async(req, res)=> {
 
     try {
-        console.log("gusaxygau")
         const response = await questionService.fetchQuestions({params: req?.params});
         if(!response) throw new CustomError("Question not fetched", 500)
         res.status(200).json(response);
     } catch (error) {
-        console.log("errorororor", error)
         res.status(error?.code|| 500).json({message: error?.message});
     }
 }

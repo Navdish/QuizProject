@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { Box, Button, Typography } from "@mui/material";
 import * as React from "react";
-import axios from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 import { useNavigate } from "react-router-dom";
 
 const Home: FC = () => {
@@ -11,9 +11,20 @@ const Home: FC = () => {
   const navigate = useNavigate();
   
   async function getTests() {
-    const tests = await axios.get(`http://localhost:8080/test`);
-    console.log("tests", tests.data);
-    setTests(tests.data);
+    try {
+      const response = await axios.get(`http://localhost:8080/test`);
+      console.log("tests", response);
+      setTests(response.data);
+    } catch (error: any) {
+      console.log(error.response.status, "eror")
+      if(error.response.status === 498) {
+        localStorage.clear();
+        localStorage.removeItem('persist:root')
+        console.log(localStorage.getItem('persist:root'));
+        // navigate('/signup')
+      }
+    }
+    
   }
   React.useEffect(() => {
     getTests();
