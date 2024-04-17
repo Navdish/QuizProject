@@ -54,6 +54,7 @@ const Dashboard: FC = () => {
   async function getTests() {
     try {
       const tests = await axios.get(`http://localhost:8080/test`);
+      console.log("Tests", tests.data);
       setTests(tests.data);
     } catch (error: any) {
       console.log(error.response.status, "eror");
@@ -139,7 +140,7 @@ const Dashboard: FC = () => {
               >
                 <Box>{test.title}</Box>
                 <Box>
-                  <IconButton onClick={() => navigate(`/add_test/${test.id}`)}>
+                  <IconButton onClick={() => navigate(`/add_test/${test.uuid}`)}>
                     <EditIcon />
                   </IconButton>
                   <IconButton>
@@ -168,7 +169,7 @@ const Dashboard: FC = () => {
                 alert("Could not add test");
               } else {
                 console.log("response payload test ", response.payload);
-                navigate(`/add_test/${response.payload.id}`);
+                navigate(`/add_test/${response.payload.uuid}`);
               }
             });
             handleClose();

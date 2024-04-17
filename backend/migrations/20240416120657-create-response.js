@@ -8,13 +8,19 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      uuid:{
+      uuid: {
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4,
       },
       userId: {
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
         allowNull: false,
+        references: {
+          model: "user", // name of Source model
+          key: "id",
+        },
+        onUpdate: "CASCADE",
+        onDelete: "SET NULL",
       },
       response: {
         type: Sequelize.STRING,
@@ -31,6 +37,12 @@ module.exports = {
       test_questionId: {
         type: Sequelize.INTEGER,
         allowNull: false,
+        references: {
+          model: "test_question", // name of Source model
+          key: "id",
+        },
+        onUpdate: "CASCADE",
+        onDelete: "SET NULL",
       },
       createdAt: {
         allowNull: false,

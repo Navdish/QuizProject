@@ -1,18 +1,20 @@
 const CustomError = require('../lib/error');
 const {test, question, test_question} = require('../models');
-const {User} = require("../model")
+const {user} = require("../models")
 const {role_enum} = require('../lib/constants')
 
 exports.addQuestions = async({userId, data})=>{
-    const user = await User.findById(userId);
-    if(!user) throw new CustomError("User not found", 400);
+    const user_data = await user.findOne({where:{uuid: userId}});
+    if(!user_data) throw new CustomError("User not found", 400);
     const {option, description, answer, weightage} = data;
-    if(user.role === role_enum.STUDENT) throw new CustomError("Not allowed", 401);
+    if(user_data.role === role_enum.STUDENT) throw new CustomError("Not allowed", 401);
     const response = await question.create({options: option, description, answer, weightage: Number(weightage)});
     if(!response) throw new CustomError("Question not created", 500);
     if(data.optional && data.testId) {
         const {optional, testId} = data;
-        const relation = await test_question.create({testId, optional, questionId:response.dataValues.id });
+        const test_data = await test.findOne({where: {uuid: testId}});
+        console.log("test details", test_data);
+        const relation = await test_question.create({testId: test_data.id, optional, questionId:response.dataValues.id });
         if(!relation) throw new CustomError("Through table not created", 500);
     }
     return response;
@@ -27,7 +29,11 @@ exports.fetchQuestions = async({ params})=> {
         if(response.length === 0) throw new CustomError("No questions", 204);
         return response;
     }
-    const response = await test_question.findAll({ testId: id, include: ['question']});
+    const test_data = await test.findOne({where: {uuid: id}});
+    console.log("test details cdd", test_data.id);
+    const response = await test_question.findAll({where:{testId: test_data.id}, include: 'question'});
+    console.log('getting questions related to test response: ', response);
+    // console.log( "reposnse.......",response[0])
     if(!response) throw new CustomError("Questions not found", 404);
     if(response.length === 0) throw new CustomError("No questions", 204);
     return response;

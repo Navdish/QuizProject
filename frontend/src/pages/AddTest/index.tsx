@@ -36,7 +36,12 @@ const AddTest: FC = () => {
   async function getQuestions() {
     try {
       const questions = await axios.get(`http://localhost:8080/question/${id}`);
-    console.log("questions", questions);
+      console.log('questions: ', questions);
+
+    //   const response = await fetch(`http://localhost:8080/question/${id}`);
+    // const question = await  response.json();
+    // console.log('question after fetch: ', question);
+    
     var totalWeight = 0;
     questions &&
       questions?.data?.length > 0 &&
@@ -146,6 +151,7 @@ const AddTest: FC = () => {
                       alignItems: "center",
                       justifyContent: "space-around",
                     }}
+                    key={que.id}
                   >
                     <Box>{que.question.description}</Box>
                     <Box>

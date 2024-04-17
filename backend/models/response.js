@@ -8,16 +8,30 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "test_questionId",
         targetKey: "id",
       });
+      this.belongsTo(models.user, {
+        foreignKey: "userId",
+        targetKey: "id",
+      });
+    }
+
+    toJSON(){
+      return {...this.get(), id: undefined, userId: undefined, test_questionId: undefined}
     }
   }
   response.init(
     {
+      id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+      },
       uuid:{
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
       },
       userId: {
-        type: DataTypes.UUID,
+        type: DataTypes.INTEGER,
         allowNull: false,
       },
       response: {
@@ -33,7 +47,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
       test_questionId: {
-        type: DataTypes.UUID,
+        type: DataTypes.INTEGER,
         allowNull: false,
       },
     },

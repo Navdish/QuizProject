@@ -13,9 +13,18 @@ module.exports = (sequelize, DataTypes) => {
         sourceKey: "id",
       });
     }
+    toJSON(){
+      return {...this.get(), id: undefined, testId: undefined, questionId: undefined}
+    }
   }
   test_question.init(
     {
+      id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+      },
       uuid:{
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
@@ -25,11 +34,11 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
       testId: {
-        type: DataTypes.UUID,
+        type: DataTypes.INTEGER,
         allowNull: false,
       },
       questionId: {
-        type: DataTypes.UUID,
+        type: DataTypes.INTEGER,
         allowNull: false,
       },
     },

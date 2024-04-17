@@ -8,12 +8,25 @@ module.exports = (sequelize, DataTypes) => {
         sourceKey: "id",
       });
     }
+    toJSON(){
+      return {...this.get(), id: undefined}
+    }
   }
   test.init(
     {
+      id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+      },
       uuid:{
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
+      },
+      creator: {
+        type: DataTypes.UUID,
+        allowNull: false,
       },
       title: {
         type: DataTypes.STRING,

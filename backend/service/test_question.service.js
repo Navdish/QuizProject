@@ -1,13 +1,11 @@
 const CustomError = require('../lib/error');
-const {test, question, test_question} = require('../models');
-const {User} = require("../model")
+const {test, question, test_question, user} = require('../models');
 const {role_enum} = require('../lib/constants');
-const { INTEGER } = require('sequelize');
 
 exports.add_test_questions = async({userId, data})=>{
-    const user = await User.findById(userId);
-    if(!user) throw new CustomError("User not found", 400);
-    if(user.role !== role_enum.ADMIN) throw new CustomError("Not allowed", 401);
+    const user_data = await user.findOne({where:{uuid : userId}});
+    if(!user_data) throw new CustomError("User not found", 400);
+    if(user_data.role !== role_enum.ADMIN) throw new CustomError("Not allowed", 401);
     const {testId, questionId, optional} = data;
     if(!(testId && questionId && optional)) throw new CustomError("Incomplete credentials", 422); 
     // check if the question and the test exists or not
