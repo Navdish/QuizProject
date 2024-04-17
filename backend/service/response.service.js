@@ -7,7 +7,6 @@ exports.addResponses = async({userId, data, params})=>{
     if(!user) throw new CustomError("User not found", 400);
     if(user.role !== 'STUDENT') throw new CustomError("Not allowed", 401);
     const {id} = params;
-    console.log("response service2", data, params)
 
     const {totalMarks, responses} = data;
     const questionResponse = await Question.find({testId: id});
@@ -22,7 +21,6 @@ exports.addResponses = async({userId, data, params})=>{
             else if(responses[q._id]) responses[q._id].push(false);
         }
     })
-    console.log("response service2")
     const response = await Response.create({userId, testId: id, marks, totalMarks, questions: responses});
     if(!response) throw new CustomError("Question not created", 500);
     return response;

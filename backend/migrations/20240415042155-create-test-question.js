@@ -1,13 +1,16 @@
-'use strict';
-/** @type {import('sequelize-cli').Migration} */
+"use strict";
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('test_questions', {
+    await queryInterface.createTable("test_questions", {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+      },
+      uuid:{
+        type: Sequelize.UUID,
+        defaultValue: Sequelize.UUIDV4,
       },
       optional: {
         type: Sequelize.BOOLEAN,
@@ -23,15 +26,15 @@ module.exports = {
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('test_questions');
-  }
+    await queryInterface.dropTable("test_questions");
+  },
 };

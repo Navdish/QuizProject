@@ -1,6 +1,5 @@
 const CustomError = require('../lib/error');
 const {testService} = require('../service');
-const jwt = require("jsonwebtoken");
 
 
 exports.addTest = async(req, res)=> {
@@ -9,7 +8,7 @@ exports.addTest = async(req, res)=> {
         if(!response) throw new CustomError("Post not added", 500)
         res.status(200).json(response);
     } catch (error) {
-        res.status(error?.code).json({message : error?.message});
+        res.status(error?.code || 500).json({message : error?.message});
     }
 }
 
@@ -19,26 +18,6 @@ exports.fetchTest = async(req, res)=> {
         if(!response) throw new CustomError("tests not fetched", 500)
         res.status(200).json(response);
     } catch (error) {
-        res.status(error?.code).json({message : error?.message});
+        res.status(error?.code || 500).json({message : error?.message});
     }
 }
-
-// exports.updatePost = async(req, res)=> {
-//     try {
-//         const response = await postService.updatePost({tokenUserId : req?.user?.id, body : req?.body, params : req?.params});
-//         res.status(200).json(response);
-//     }
-//     catch (error) {
-//         res.status(error?.code).json({message : error?.message});
-//     }   
-// }
-
-// exports.removePost = async(req, res)=> {
-//     try {
-//         const response = await postService.deletePost({userId : req?.user?.id, params : req?.params});
-//         res.status(200).json(response);
-//     }
-//     catch (error) {
-//         res.status(error?.code).json({message : error?.message});
-//     }
-// }

@@ -1,6 +1,5 @@
 const CustomError = require('../lib/error');
 const {responseService} = require('../service');
-const jwt = require("jsonwebtoken");
 
 
 exports.addResponse = async(req, res)=> {
@@ -9,7 +8,7 @@ exports.addResponse = async(req, res)=> {
         if(!response) throw new CustomError("Response not added", 500)
         res.status(200).json(response);
     } catch (error) {
-        res.status(error?.code).json({message : error?.message});
+        res.status(error?.code || 500).json({message : error?.message});
     }
 }
 
@@ -20,6 +19,6 @@ exports.fetchResponse = async(req, res)=> {
         if(!response) throw new CustomError("Question not fetched", 500)
         res.status(200).json(response);
     } catch (error) {
-        res.status(error?.code).json({message: error?.message});
+        res.status(error?.code || 500).json({message: error?.message});
     }
 }

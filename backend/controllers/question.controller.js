@@ -1,6 +1,5 @@
 const CustomError = require('../lib/error');
 const {questionService} = require('../service');
-const jwt = require("jsonwebtoken");
 
 
 exports.addQuestion = async(req, res)=> {
