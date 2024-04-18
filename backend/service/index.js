@@ -4,6 +4,7 @@ module.exports = {
     questionService: require('./question.service'),
     responseService: require('./response.service.js'),
     test_question_service: require('./test_question.service.js'),
+    result_service: require('./result.service.js'),
 }
 
 

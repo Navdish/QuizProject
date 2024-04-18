@@ -11,6 +11,5 @@ exports.add_test_questions = async({userId, data})=>{
     // check if the question and the test exists or not
     const response = await test_question.create({testId: Number(testId), questionId: Number(questionId), optional:optional ==="true"?true:false});
     if(!response) throw new CustomError("Question not created", 500);
-    console.log("test_question response", response);
     return response;
 }

@@ -42,7 +42,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      question_marks: {
+      marks: {
         type: DataTypes.INTEGER,
         allowNull: false,
       },

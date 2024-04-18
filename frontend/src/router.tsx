@@ -17,23 +17,18 @@ interface ProtectedProps  {
 }
 
 const Protected = (props : ProtectedProps) => {
-    // console.log("protected")
-    // const user = useSelector((state: RootState)=> state?.user?.user);
     const token = localStorage.getItem('token');
     return token? <>{props.children}</> :  <Navigate to="/signup" />;
 };
 const Private = (props : ProtectedProps) => {
-    // const token = localStorage.getItem('token');
     const user = useSelector((state: RootState)=> state?.user?.user);
     return Object.keys(user).length !== 0 && user?.role !== 'ADMIN' ? <Navigate to="/" /> : <>{props.children}</>;
 };
 const Public = (props : ProtectedProps) => {
     const user = useSelector((state: RootState)=> state?.user?.user);
-    console.log(user, "user details public", user?.role !== 'STUDENT')
     return Object.keys(user).length !== 0 && user?.role !== 'STUDENT' ? <Navigate to="/dashboard" /> : <>{props.children}</>;
 };
 const LoggedIn = (props : ProtectedProps) => {
-    // const user = useSelector((state: RootState)=> state?.user?.user);
     const token = localStorage.getItem('token');
     return token ? <Navigate to="/" /> : <>{props.children}</>;
 };

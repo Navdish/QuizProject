@@ -3,18 +3,15 @@ const { test } = require("../models");
 const {user} = require("../models")
 
 exports.addTests = async ({ userId, data }) => {
-  console.log(data);
   const { testName, instructions } = data;
   if (!testName || !instructions) throw new CustomError("details not found", 404);
   const response = await test.create({ creator: userId,title: testName,instruction: instructions });
   if (!response) throw new CustomError("Post not created", 500);
-  console.log(response);
   return response;
 };
 
 
 exports.fetchTests = async ({ userId, query }) => {
-  console.log("userId", userId);
   const user_data = await user.findOne({where :{uuid : userId}});
   if (!user_data) throw new CustomError("User not found", 400);
   if (user_data?.role === "ADMIN") {

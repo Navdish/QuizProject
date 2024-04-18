@@ -16,7 +16,7 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: "user", // name of Source model
+          model: "user", 
           key: "id",
         },
         onUpdate: "CASCADE",
@@ -26,7 +26,7 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      question_marks: {
+      marks: {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
@@ -38,7 +38,7 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: "test", // name of Source model
+          model: "test", 
           key: "id",
         },
         onUpdate: "CASCADE",
@@ -48,7 +48,7 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: "question", // name of Source model
+          model: "question",
           key: "id",
         },
         onUpdate: "CASCADE",

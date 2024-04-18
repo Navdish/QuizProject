@@ -217,14 +217,12 @@ const Dashboard: FC = () => {
             const formData = new FormData(event.currentTarget);
             const formJson = Object.fromEntries((formData as any).entries());
             var options = formJson.option.split(",");
-            console.log("options", options);
             var trimmed_options = options.map((s: any) => s.trim());
             const form = {
               ...formJson,
               option: trimmed_options,
               answer,
             };
-            console.log(form);
             postQuestion(form);
             handleClose();
             // window.location.reload();

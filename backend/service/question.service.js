@@ -13,7 +13,6 @@ exports.addQuestions = async({userId, data})=>{
     if(data.optional && data.testId) {
         const {optional, testId} = data;
         const test_data = await test.findOne({where: {uuid: testId}});
-        console.log("test details", test_data);
         const relation = await test_question.create({testId: test_data.id, optional, questionId:response.dataValues.id });
         if(!relation) throw new CustomError("Through table not created", 500);
     }

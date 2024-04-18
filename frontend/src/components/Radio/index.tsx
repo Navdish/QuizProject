@@ -22,8 +22,7 @@ function RadioComponent(props: Radioprops) {
 
   const getResponses = async() => {
     try {
-      const res = await axios.get(`http://localhost:8080/response/${props.q.uuid}`);
-       
+      const res = await axios.get(`http://localhost:8080/response/${props.q.uuid}`); 
       setValue(res.data.response);
     } catch (error) {
       console.log("errorrrrr", error);
@@ -39,7 +38,6 @@ function RadioComponent(props: Radioprops) {
       question_marks : props.q.question.weightage,
       test_questionId : props.q.uuid,
     });
-    console.log('scoreResponse: ', scoreResponse);
     } catch (error) {
       console.log("Errorr", error)
     }
@@ -61,12 +59,13 @@ function RadioComponent(props: Radioprops) {
               value={value}
               onChange={handleChange}
             >
-              {props.q.question.options.map((op:any) => {
+              {props.q.question.options.map((op:any, id:any) => {
                 return (
                   <FormControlLabel
                     value={op}
                     control={<Radio />}
                     label={op}
+                    key={id}
                   />
                 );
               })}

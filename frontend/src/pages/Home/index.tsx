@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { Box, Button, Typography } from "@mui/material";
 import * as React from "react";
-import axios, { AxiosError, AxiosResponse } from "axios";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const Home: FC = () => {
@@ -13,7 +13,6 @@ const Home: FC = () => {
   async function getTests() {
     try {
       const response = await axios.get(`http://localhost:8080/test`);
-      console.log("tests", response);
       setTests(response.data);
     } catch (error: any) {
       console.log(error.response.status, "eror");
@@ -21,7 +20,7 @@ const Home: FC = () => {
         localStorage.clear();
         localStorage.removeItem("persist:root");
         console.log(localStorage.getItem("persist:root"));
-        // navigate('/signup')
+        navigate('/signup')
       }
     }
   }
@@ -64,13 +63,14 @@ const Home: FC = () => {
                   alignItems: "center",
                   justifyContent: "space-between",
                 }}
+                key={test.uuid}
               >
                 <Box>{test.title}</Box>
                 <Box>
                   <Button variant="contained" onClick={() => handleClick(test)}>
                     Take the test
                   </Button>
-                </Box>
+                </Box>  
               </Box>
             );
           })}

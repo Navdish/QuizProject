@@ -5,7 +5,6 @@ import storage from 'redux-persist/lib/storage'
 // import bookSlice from '../features/book/book.slice'
 // import issuedSlice from '../features/issued/issued.slice'
 
-
 const persistConfig = {
     key: 'root',
     storage,
@@ -18,7 +17,10 @@ export const store = configureStore({
         user : persistedReducer,
         // book : bookSlice,
         // issued : issuedSlice
-    }
+    },
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware({
+        serializableCheck: false
+      }),
 })
 
 export type RootState = ReturnType<typeof store.getState>

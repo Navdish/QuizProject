@@ -18,7 +18,6 @@ const Test: FC = () => {
 
   async function getQuestions() {
     const questions = await axios.get(`http://localhost:8080/question/${id}`);
-    console.log("questions", questions);
     var totalWeight = 0;
     questions &&
       questions?.data?.length > 0 &&
@@ -26,7 +25,6 @@ const Test: FC = () => {
         totalWeight += q.question.weightage;
       });
     setTotal(totalWeight);
-    // setQuestions(qs);
     setQuestions(questions.data);
   }
 
@@ -37,8 +35,12 @@ const Test: FC = () => {
 
   async function handleClick() {
     
-    // calculate marks
-    // fetch all responses
+    try {
+      const marks = await axios.get(`http://localhost:8080/result/${id}`);
+      alert(`You got ${marks.data.marks} out of ${total}`)
+    } catch (error) {
+      console.log("result error", error);
+    }
     navigate("/");
   }
 
@@ -61,7 +63,7 @@ const Test: FC = () => {
           questions.length > 0 &&
           questions?.map((q: any) => {
             return (
-              <Box>
+              <Box key={q.uuid}>
                 
                 <RadioComponent q={q} />
               </Box>

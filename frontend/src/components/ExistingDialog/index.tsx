@@ -37,7 +37,7 @@ const ExistingDialog = (que: any) => {
         // onClick={handleToggle(value)}
       >
         <ListItemText id={que.que.id} primary={`Question - ${que.que.description}`} />
-        <Typography>Required - &nbsp;</Typography>
+        <Typography>Negative marking - &nbsp;</Typography>
         <RadioGroup
           row
           aria-labelledby="demo-controlled-radio-buttons-group"
