@@ -30,10 +30,7 @@ exports.fetchQuestions = async({ params})=> {
         return response;
     }
     const test_data = await test.findOne({where: {uuid: id}});
-    console.log("test details cdd", test_data.id);
     const response = await test_question.findAll({where:{testId: test_data.id}, include: 'question'});
-    console.log('getting questions related to test response: ', response);
-    // console.log( "reposnse.......",response[0])
     if(!response) throw new CustomError("Questions not found", 404);
     if(response.length === 0) throw new CustomError("No questions", 204);
     return response;

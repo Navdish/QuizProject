@@ -5,31 +5,49 @@ import {
   Radio,
   RadioGroup,
 } from "@mui/material";
-import React from "react";
+import axios from "axios";
+import React, { useEffect } from "react";
 
 interface Radioprops {
   q: any;
-  response: any;
-  setResponse: any;
 }
 
+
+
 function RadioComponent(props: Radioprops) {
+  useEffect(()=> {
+    getResponses();
+  })
   const [value, setValue] = React.useState("");
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const getResponses = async() => {
+    try {
+      const res = await axios.get(`http://localhost:8080/response/${props.q.uuid}`);
+       
+      setValue(res.data.response);
+    } catch (error) {
+      console.log("errorrrrr", error);
+    }
+  }
+
+  const handleChange = async(event: React.ChangeEvent<HTMLInputElement>) => {
     setValue((event.target as HTMLInputElement).value);
-    const id = props.q._id;
-    var obj: any = {};
-    obj[id] = (event.target as HTMLInputElement).value;
-    console.log("object", obj);
-    props.response[id] = [(event.target as HTMLInputElement).value];
-    props.setResponse(props.response);
-    console.log("props response", props.response);
+    
+    try {
+      const scoreResponse = await axios.post(`http://localhost:8080/response`, {
+      response: (event.target as HTMLInputElement).value,
+      question_marks : props.q.question.weightage,
+      test_questionId : props.q.uuid,
+    });
+    console.log('scoreResponse: ', scoreResponse);
+    } catch (error) {
+      console.log("Errorr", error)
+    }
   };
   return (
     <Box>
       <Box sx={{ fontSize: "20px", ml: "20px" }}>
-        Question - {props.q?.question}
+        Question - {props.q.question.description}
       </Box>
       <Box sx={{ ml: "20px" }}>
         <RadioGroup
@@ -43,26 +61,15 @@ function RadioComponent(props: Radioprops) {
               value={value}
               onChange={handleChange}
             >
-              <FormControlLabel
-                value={props.q.option1}
-                control={<Radio />}
-                label={props.q.option1}
-              />
-              <FormControlLabel
-                value={props.q.option2}
-                control={<Radio />}
-                label={props.q.option2}
-              />
-              <FormControlLabel
-                value={props.q.option3}
-                control={<Radio />}
-                label={props.q.option3}
-              />
-              <FormControlLabel
-                value={props.q.option4}
-                control={<Radio />}
-                label={props.q.option4}
-              />
+              {props.q.question.options.map((op:any) => {
+                return (
+                  <FormControlLabel
+                    value={op}
+                    control={<Radio />}
+                    label={op}
+                  />
+                );
+              })}
             </RadioGroup>
           </FormControl>
         </RadioGroup>

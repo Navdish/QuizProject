@@ -4,8 +4,12 @@ const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class response extends Model {
     static associate(models) {
-      this.belongsTo(models.test_question, {
-        foreignKey: "test_questionId",
+      this.belongsTo(models.test, {
+        foreignKey: "testId",
+        targetKey: "id",
+      });
+      this.belongsTo(models.question, {
+        foreignKey: "questionId",
         targetKey: "id",
       });
       this.belongsTo(models.user, {
@@ -15,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
     }
 
     toJSON(){
-      return {...this.get(), id: undefined, userId: undefined, test_questionId: undefined}
+      return {...this.get(), id: undefined, userId: undefined, testId: undefined, questionId: undefined}
     }
   }
   response.init(
@@ -46,10 +50,14 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.BOOLEAN,
         allowNull: false,
       },
-      test_questionId: {
+      testId: {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
+      questionId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      }
     },
     {
       sequelize,

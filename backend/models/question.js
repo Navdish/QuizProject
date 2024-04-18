@@ -7,6 +7,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "questionId",
         sourceKey: "id",
       });
+      this.hasMany(models.response, {
+        foreignKey: "questionId",
+        sourceKey: "id",
+      });
     }
     toJSON(){
       return {...this.get(), id: undefined}

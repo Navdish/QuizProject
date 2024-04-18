@@ -14,7 +14,6 @@ const Test: FC = () => {
   let { id } = useParams();
   const [total, setTotal] = React.useState<Number>();
   const [questions, setQuestions] = React.useState<any>();
-  const [response, setResponse] = React.useState<any>({});
   const navigate = useNavigate();
 
   async function getQuestions() {
@@ -24,30 +23,22 @@ const Test: FC = () => {
     questions &&
       questions?.data?.length > 0 &&
       questions?.data?.map((q: any) => {
-        totalWeight += q.weightage;
+        totalWeight += q.question.weightage;
       });
-    console.log(totalWeight);
     setTotal(totalWeight);
     // setQuestions(qs);
     setQuestions(questions.data);
   }
+
+  
   React.useEffect(() => {
     getQuestions();
   }, []);
 
   async function handleClick() {
-    // let data = {
-    //   totalMarks: total,
-    //    responses: response
-    // };
-    // console.log("dataa ", data);
-    console.log("???/")
-    const scoreResponse = await axios.post(`http://localhost:8080/response/${id}`, {
-      totalMarks: total,
-       responses: response
-    });
-    console.log(scoreResponse?.data?.marks, "response")
-    alert(`Your Score is ${scoreResponse?.data?.marks}`)
+    
+    // calculate marks
+    // fetch all responses
     navigate("/");
   }
 
@@ -72,7 +63,7 @@ const Test: FC = () => {
             return (
               <Box>
                 
-                <RadioComponent q={q} response={response} setResponse ={setResponse}/>
+                <RadioComponent q={q} />
               </Box>
             );
           })}
