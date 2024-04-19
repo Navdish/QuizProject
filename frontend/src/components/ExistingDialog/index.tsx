@@ -20,10 +20,10 @@ const ExistingDialog = (que: any) => {
 
   const handleAdd =async(e:React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     //create a new test-question with testId from params and questionid from que.que.id and optional from radio
-    console.log("testId", id, "questionId", que.que.id, "optional", radio);
+    console.log("testId", id, "questionId", que.que.uuid, "optional", radio);
     const question = await axios.post(`http://localhost:8080/test_question`,{
         testId: id,
-        questionId: que.que.id,
+        questionId: que.que.uuid,
         optional: radio
     });
     console.log("question posted", question);
