@@ -225,7 +225,6 @@ const Dashboard: FC = () => {
             };
             postQuestion(form);
             handleClose();
-            // window.location.reload();
           },
         }}
       >

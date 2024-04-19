@@ -50,14 +50,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.BOOLEAN,
         allowNull: false,
       },
-      testId: {
+      test_questionId: {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
-      questionId: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-      }
     },
     {
       sequelize,

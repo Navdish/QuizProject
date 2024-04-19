@@ -34,21 +34,11 @@ module.exports = {
         type: Sequelize.BOOLEAN,
         allowNull: false,
       },
-      testId: {
+      test_questionId: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: "test", 
-          key: "id",
-        },
-        onUpdate: "CASCADE",
-        onDelete: "SET NULL",
-      },
-      questionId: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-          model: "question",
+          model: "test_questions", 
           key: "id",
         },
         onUpdate: "CASCADE",

@@ -3,6 +3,7 @@ import { Box, Button, Typography } from "@mui/material";
 import * as React from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import DateRangePicker from "../../components/DateRangePicker";
 
 const Home: FC = () => {
   axios.defaults.headers.common["token"] = localStorage.getItem("token");
@@ -75,6 +76,8 @@ const Home: FC = () => {
             );
           })}
       </Box>
+
+      <DateRangePicker />
     </Box>
   );
 };
