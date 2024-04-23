@@ -23,6 +23,7 @@ function RadioComponent(props: Radioprops) {
   const getResponses = async() => {
     try {
       const res = await axios.get(`http://localhost:8080/response/${props.q.uuid}`); 
+      console.log('res: ', res);
       setValue(res.data.response);
     } catch (error) {
       console.log("errorrrrr", error);

@@ -17,6 +17,7 @@ exports.fetchResponse = async(req, res)=> {
     try {
         const response = await responseService.fetchResponses({userId : req?.user?.id, params: req?.params});
         if(!response) throw new CustomError("Question not fetched", 500)
+        console.log('response: ', response);
         res.status(200).json(response);
     } catch (error) {
         res.status(error?.code || 500).json({message: error?.message});
